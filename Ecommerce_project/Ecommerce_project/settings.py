@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts.apps.AccountsConfig',
     'category.apps.CategoryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,6 +70,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Ecommerce_project.wsgi.application'
+
+# Made for the account app as this will be the main model to create users
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Database
