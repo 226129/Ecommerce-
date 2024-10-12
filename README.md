@@ -1,6 +1,6 @@
 # Ecommerce-
 ## Description 
-This ecommerce is designed for educational purposes and all the contents are just to get the knowledge on how this ecommerces work. The platform will be a simple ecommerce about some products with payment methods, categories, users with their dashboards, shopping cart, etc.
+This ecommerce is designed for educational purposes and all the contents are just to get the knowledge on how ecommerces work. The platform will be a simple ecommerce about some products with payment methods, categories, users with their dashboards, a shopping cart, etc.
 
 ## Technologies
 - **Backend**: Django
