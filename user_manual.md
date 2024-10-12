@@ -6,7 +6,8 @@ This manual is made in order to follow step by step what to do in a specific sit
 - [Table of Contents](#table-of-contents)
 - [Starting a new app](#starting-a-new-app)
 - [Generating a new model](#generating-a-new-model)
-- [Adding specific url based on the slug](#adding-specific-url-based-on-the-slug)
+- [Accessing specific url based on the slug](#accessing-specific-url-based-on-the-slug)
+- [Filtering process](#filtering-process)
 - [Adding media files to the system](#adding-media-files-to-the-system)
 - [Generate automatically a field regarding on another field](#generate-automatically-a-field-regarding-on-another-field)
 
@@ -52,7 +53,7 @@ def __str__(self):
     return self.product_name
 ```
 
-# Adding specific url based on the slug
+# Accessing specific url based on the slug
 1. In the urlpatterns of the file which holds all the app's views, follow the next sintaxis:
 ```python
 path('<slug:category_slug>', views.store, name='products_by_category')
@@ -81,6 +82,42 @@ def store(request, category_slug=None):
 ```
 This code receives by default no slug in order to display all the possible products with every category. In order to display by category we have to first initialize it, and then make a conditional where if there is a category_slug passed as an argument in the url then we get an object based on the model and the category_slug. Then we filter all the products by this category object and if it is available. Finally we select the total amount of products. On the other hand we only select all the products available in the db and the total amount of them. 
 
+
+
+
+
+# Filtering process 
+1. In the app that you want the filtering process you need to add the following file:
+```text
+context_processors.py
+```
+2. Inside of this file generate a function with the model that you want to filter by and return a dictionary with all the possible links, which is in this case a query.
+```python
+def menu_links(request):
+    links = Category.objects.all()
+    return dict(links=links)
+```
+3. Add this context processor to the settings.py in order to be recognizable by the system following the next syntax.
+```python
+'model_name.context_processors.menu_links'
+```
+4. In order to display this, go to the template you want to filter and add a loop that loops in the dictionary that you created in the context_processors.py
+```python
+{% for category in links %}
+    <a class="dropdown-item" href="#">{{ category.category_name }}</a>
+{% endfor %}
+```
+5. In the model of category create a method named get_url which returns the slug.
+```python
+def get_url(self):
+    return reverse('products_by_category', args=[self.slug])
+```
+The products_by_category is the same as declared in the [accessing specific url](#accessing-specific-url-based-on-the-slug). Reverse is imported from django.urls
+
+
+
+
+
 # Adding media files to the system 
 1. Configure the media in setting.py
 
@@ -100,6 +137,10 @@ urlpatterns = [
     path('', views.home, name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
+
+
+
+
 
 # Generate automatically a field regarding on another field
 1. Navigate to the admin that holds the model that you want to modify with this info 
